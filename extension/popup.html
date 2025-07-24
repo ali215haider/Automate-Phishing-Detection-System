@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishGuard</title>
+    <style>
+        body {
+            width: 350px;
+            min-height: 400px;
+            margin: 0;
+            padding: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .logo i {
+            margin-right: 8px;
+            color: #ffd700;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .status-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .status-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .status-safe {
+            background: #4ade80;
+        }
+
+        .status-warning {
+            background: #fbbf24;
+        }
+
+        .status-danger {
+            background: #ef4444;
+        }
+
+        .status-text {
+            flex: 1;
+        }
+
+        .status-title {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .status-subtitle {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .url-info {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+            word-break: break-all;
+            font-size: 12px;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .action-btn i {
+            font-size: 16px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            opacity: 0.6;
+            margin-top: 16px;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+            font-size: 12px;
+        }
+
+        .score-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .score-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+            border-radius: 3px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i>
+            PhishGuard
+        </div>
+        <div class="subtitle">Real-time Phishing Protection</div>
+    </div>
+
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <div id="error" class="error hidden">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span id="error-message">Unable to analyze current page</span>
+    </div>
+
+    <div id="content" class="hidden">
+        <div class="status-card">
+            <div class="status-indicator">
+                <div id="status-icon" class="status-icon status-safe">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="status-text">
+                    <div id="status-title" class="status-title">Safe Website</div>
+                    <div id="status-subtitle" class="status-subtitle">No threats detected</div>
+                </div>
+            </div>
+            <div id="score-bar" class="score-bar">
+                <div id="score-fill" class="score-fill" style="width: 10%; background: #4ade80;"></div>
+            </div>
+        </div>
+
+        <div class="url-info">
+            <i class="fas fa-globe"></i>
+            <span id="current-url">Loading...</span>
+        </div>
+
+        <div class="quick-actions">
+            <button id="rescan-btn" class="action-btn">
+                <i class="fas fa-sync"></i>
+                <span>Rescan</span>
+            </button>
+            <button id="report-btn" class="action-btn">
+                <i class="fas fa-flag"></i>
+                <span>Report</span>
+            </button>
+            <button id="dashboard-btn" class="action-btn">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </button>
+            <button id="settings-btn" class="action-btn">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="footer">
+        Protected by PhishGuard AI Detection
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

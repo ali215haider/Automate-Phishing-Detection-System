@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+
+{% block title %}Scan History - PhishGuard{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>
+        <i class="fas fa-history me-2"></i>
+        Scan History
+    </h2>
+    <div class="d-flex gap-2">
+        <select class="form-select" id="filterType" style="width: auto;">
+            <option value="">All Types</option>
+            <option value="url">URL Scans</option>
+            <option value="email">Email Analysis</option>
+            <option value="html">HTML Scans</option>
+        </select>
+        <select class="form-select" id="filterResult" style="width: auto;">
+            <option value="">All Results</option>
+            <option value="safe">Safe</option>
+            <option value="phishing">Phishing</option>
+            <option value="suspicious">Suspicious</option>
+        </select>
+    </div>
+</div>
+
+{% if scans.items %}
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover" id="scanHistoryTable">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Content</th>
+                        <th>Result</th>
+                        <th>Confidence</th>
+                        <th>Method</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for scan in scans.items %}
+                    <tr data-type="{{ scan.scan_type }}" data-result="{{ scan.result }}">
+                        <td>
+                            {% if scan.scan_type == 'url' %}
+                                <span class="badge bg-primary">
+                                    <i class="fas fa-link me-1"></i>URL
+                                </span>
+                            {% elif scan.scan_type == 'email' %}
+                                <span class="badge bg-info">
+                                    <i class="fas fa-envelope me-1"></i>Email
+                                </span>
+                            {% else %}
+                                <span class="badge bg-success">
+                                    <i class="fas fa-code me-1"></i>HTML
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="text-truncate" style="max-width: 300px;" title="{{ scan.content }}">
+                                {{ scan.content }}
+                            </div>
+                        </td>
+                        <td>
+                            {% if scan.result == 'safe' %}
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check me-1"></i>Safe
+                                </span>
+                            {% elif scan.result == 'phishing' %}
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>Phishing
+                                </span>
+                            {% else %}
+                                <span class="badge bg-warning">
+                                    <i class="fas fa-question me-1"></i>Suspicious
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="progress me-2" style="width: 60px; height: 20px;">
+                                    <div class="progress-bar 
+                                        {% if scan.confidence_score > 0.7 %}bg-danger
+                                        {% elif scan.confidence_score > 0.4 %}bg-warning
+                                        {% else %}bg-success{% endif %}" 
+                                        role="progressbar" 
+                                        style="width: {{ (scan.confidence_score * 100)|round }}%">
+                                    </div>
+                                </div>
+                                <span class="small">{{ (scan.confidence_score * 100)|round }}%</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary">
+                                {% if scan.detection_method == 'ml' %}
+                                    <i class="fas fa-brain me-1"></i>ML
+                                {% elif scan.detection_method == 'blacklist' %}
+                                    <i class="fas fa-ban me-1"></i>Blacklist
+                                {% else %}
+                                    <i class="fas fa-rules me-1"></i>Rules
+                                {% endif %}
+                            </span>
+                        </td>
+                        <td>
+                            <div>{{ scan.created_at.strftime('%Y-%m-%d') }}</div>
+                            <small class="text-muted">{{ scan.created_at.strftime('%H:%M:%S') }}</small>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary" 
+                                    onclick="showDetails({{ scan.id }})"
+                                    data-details="{{ scan.details|e }}">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Pagination -->
+{% if scans.pages > 1 %}
+<nav aria-label="Scan history pagination" class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if scans.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('scan_history', page=scans.prev_num) }}">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+        {% endif %}
+        
+        {% for page_num in scans.iter_pages() %}
+            {% if page_num %}
+                {% if page_num != scans.page %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('scan_history', page=page_num) }}">{{ page_num }}</a>
+                    </li>
+                {% else %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ page_num }}</span>
+                    </li>
+                {% endif %}
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+            {% endif %}
+        {% endfor %}
+        
+        {% if scans.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('scan_history', page=scans.next_num) }}">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% else %}
+<div class="card">
+    <div class="card-body text-center py-5">
+        <i class="fas fa-search fa-4x text-muted mb-3"></i>
+        <h5 class="text-muted">No scan history found</h5>
+        <p class="text-muted">Start scanning URLs, emails, or HTML files to see your history here.</p>
+        <div class="d-flex justify-content-center gap-2 mt-3">
+            <a href="{{ url_for('scan_url') }}" class="btn btn-primary">
+                <i class="fas fa-link me-2"></i>Scan URL
+            </a>
+            <a href="{{ url_for('scan_email') }}" class="btn btn-info">
+                <i class="fas fa-envelope me-2"></i>Analyze Email
+            </a>
+            <a href="{{ url_for('scan_html') }}" class="btn btn-success">
+                <i class="fas fa-code me-2"></i>Scan HTML
+            </a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Details Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Scan Details
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modalContent">
+                    <!-- Content will be loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Filter functionality
+document.getElementById('filterType').addEventListener('change', filterTable);
+document.getElementById('filterResult').addEventListener('change', filterTable);
+
+function filterTable() {
+    const typeFilter = document.getElementById('filterType').value;
+    const resultFilter = document.getElementById('filterResult').value;
+    const rows = document.querySelectorAll('#scanHistoryTable tbody tr');
+    
+    rows.forEach(row => {
+        const type = row.getAttribute('data-type');
+        const result = row.getAttribute('data-result');
+        
+        const typeMatch = !typeFilter || type === typeFilter;
+        const resultMatch = !resultFilter || result === resultFilter;
+        
+        if (typeMatch && resultMatch) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+function showDetails(scanId) {
+    const button = document.querySelector(`button[onclick="showDetails(${scanId})"]`);
+    const details = button.getAttribute('data-details');
+    
+    try {
+        const parsedDetails = JSON.parse(details);
+        const modalContent = document.getElementById('modalContent');
+        
+        let html = '<div class="row">';
+        
+        // Features
+        if (parsedDetails.features) {
+            html += '<div class="col-md-6 mb-3">';
+            html += '<h6><i class="fas fa-cog me-2"></i>Features</h6>';
+            html += '<ul class="list-unstyled small">';
+            for (const [key, value] of Object.entries(parsedDetails.features)) {
+                html += `<li><strong>${key.replace(/_/g, ' ')}:</strong> ${value}</li>`;
+            }
+            html += '</ul></div>';
+        }
+        
+        // Rules triggered
+        if (parsedDetails.rules_triggered && parsedDetails.rules_triggered.length > 0) {
+            html += '<div class="col-md-6 mb-3">';
+            html += '<h6><i class="fas fa-exclamation-triangle text-warning me-2"></i>Rules Triggered</h6>';
+            html += '<ul class="list-unstyled small">';
+            parsedDetails.rules_triggered.forEach(rule => {
+                html += `<li><i class="fas fa-arrow-right me-2"></i>${rule}</li>`;
+            });
+            html += '</ul></div>';
+        }
+        
+        // Blacklist/Whitelist info
+        html += '<div class="col-12 mb-3">';
+        html += '<h6><i class="fas fa-shield-alt me-2"></i>Security Checks</h6>';
+        html += '<div class="row">';
+        html += '<div class="col-md-6">';
+        html += `<span class="badge ${parsedDetails.blacklist_match ? 'bg-danger' : 'bg-success'}">`;
+        html += `<i class="fas ${parsedDetails.blacklist_match ? 'fa-ban' : 'fa-check'} me-1"></i>`;
+        html += `Blacklist: ${parsedDetails.blacklist_match ? 'Match Found' : 'No Match'}`;
+        html += '</span></div>';
+        html += '<div class="col-md-6">';
+        html += `<span class="badge ${parsedDetails.whitelist_match ? 'bg-success' : 'bg-secondary'}">`;
+        html += `<i class="fas ${parsedDetails.whitelist_match ? 'fa-check-circle' : 'fa-minus'} me-1"></i>`;
+        html += `Whitelist: ${parsedDetails.whitelist_match ? 'Trusted' : 'Not Listed'}`;
+        html += '</span></div>';
+        html += '</div></div>';
+        
+        html += '</div>';
+        
+        modalContent.innerHTML = html;
+        
+        const modal = new bootstrap.Modal(document.getElementById('detailsModal'));
+        modal.show();
+        
+    } catch (e) {
+        console.error('Error parsing details:', e);
+        document.getElementById('modalContent').innerHTML = '<p class="text-danger">Error loading scan details.</p>';
+        const modal = new bootstrap.Modal(document.getElementById('detailsModal'));
+        modal.show();
+    }
+}
+</script>
+{% endblock %}

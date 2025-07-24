@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+
+{% block title %}PhishGuard - Advanced Phishing Detection{% endblock %}
+
+{% block content %}
+<div class="hero-section text-center py-5 mb-5">
+    <div class="container">
+        <h1 class="display-4 mb-4">
+            <i class="fas fa-shield-alt text-primary me-3"></i>
+            Welcome to PhishGuard
+        </h1>
+        <p class="lead mb-4">
+            Advanced phishing detection system using machine learning and rule-based analysis to protect you from cyber threats.
+        </p>
+        
+        {% if not current_user.is_authenticated %}
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-user-plus me-2"></i>Get Started
+                </a>
+                <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </a>
+            </div>
+        {% else %}
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-link fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">URL Scanner</h5>
+                    <p class="card-text">
+                        Analyze URLs in real-time to detect phishing attempts, suspicious domains, and malicious links.
+                    </p>
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('scan_url') }}" class="btn btn-primary">Scan URL</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-primary">Login to Scan</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-envelope fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">Email Analyzer</h5>
+                    <p class="card-text">
+                        Check email content for phishing indicators, suspicious attachments, and social engineering tactics.
+                    </p>
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('scan_email') }}" class="btn btn-info">Analyze Email</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-info">Login to Analyze</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-code fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">HTML Scanner</h5>
+                    <p class="card-text">
+                        Upload and analyze HTML files to detect malicious scripts, hidden elements, and fake login forms.
+                    </p>
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('scan_html') }}" class="btn btn-success">Scan HTML</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-success">Login to Scan</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-brain me-2"></i>
+                        Detection Methods
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex align-items-center">
+                            <i class="fas fa-robot text-primary me-3"></i>
+                            <div>
+                                <strong>Machine Learning</strong>
+                                <div class="text-muted small">Advanced ML models trained on phishing datasets</div>
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex align-items-center">
+                            <i class="fas fa-rules text-info me-3"></i>
+                            <div>
+                                <strong>Rule-Based Analysis</strong>
+                                <div class="text-muted small">Heuristic rules for pattern detection</div>
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex align-items-center">
+                            <i class="fas fa-ban text-danger me-3"></i>
+                            <div>
+                                <strong>Blacklist Verification</strong>
+                                <div class="text-muted small">Real-time checking against known threats</div>
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex align-items-center">
+                            <i class="fas fa-chart-line text-warning me-3"></i>
+                            <div>
+                                <strong>Confidence Scoring</strong>
+                                <div class="text-muted small">Detailed risk assessment with scores</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-graduation-cap me-2"></i>
+                        Security Education
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p>Learn how to identify and protect yourself from phishing attacks:</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Recognize phishing email patterns
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Identify suspicious URLs and domains
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Best practices for online security
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Report suspected phishing attempts
+                        </li>
+                    </ul>
+                    <a href="{{ url_for('education') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-book me-2"></i>Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if current_user.is_authenticated %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">
+                        <i class="fas fa-chrome me-2"></i>
+                        Browser Extension Available
+                    </h5>
+                    <p class="card-text">
+                        Install our browser extension for real-time URL checking while browsing the web.
+                    </p>
+                    <button class="btn btn-light" onclick="showExtensionInfo()">
+                        <i class="fas fa-download me-2"></i>Install Extension
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Extension Info Modal -->
+{% if current_user.is_authenticated %}
+<div class="modal fade" id="extensionModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-chrome me-2"></i>
+                    Browser Extension
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>To install the PhishGuard browser extension:</p>
+                <ol>
+                    <li>Open Chrome and go to <code>chrome://extensions/</code></li>
+                    <li>Enable "Developer mode" in the top right</li>
+                    <li>Click "Load unpacked" and select the <code>extension</code> folder</li>
+                    <li>The extension will appear in your browser toolbar</li>
+                </ol>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    The extension will automatically check URLs as you browse and alert you to potential threats.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+function showExtensionInfo() {
+    const modal = new bootstrap.Modal(document.getElementById('extensionModal'));
+    modal.show();
+}
+</script>
+{% endblock %}

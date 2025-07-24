@@ -1,0 +1,310 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - PhishGuard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-4 mb-4">
+        <!-- User Profile Card -->
+        <div class="card">
+            <div class="card-header text-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-user-circle me-2"></i>
+                    User Profile
+                </h5>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-user-circle fa-5x text-muted"></i>
+                </div>
+                <h5>{{ current_user.username }}</h5>
+                <p class="text-muted">{{ current_user.email }}</p>
+                <p class="small text-muted">
+                    <i class="fas fa-calendar me-1"></i>
+                    Member since {{ current_user.created_at.strftime('%B %Y') }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Account Actions -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-cog me-2"></i>
+                    Account Actions
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary" onclick="changePassword()">
+                        <i class="fas fa-key me-2"></i>Change Password
+                    </button>
+                    <a href="{{ url_for('scan_history') }}" class="btn btn-outline-info">
+                        <i class="fas fa-history me-2"></i>View Scan History
+                    </a>
+                    <button class="btn btn-outline-success" onclick="exportData()">
+                        <i class="fas fa-download me-2"></i>Export Data
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <!-- Report Phishing Section -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-flag me-2"></i>
+                    Report Phishing
+                </h5>
+                <p class="text-muted mb-0">Help improve our detection by reporting phishing attempts</p>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('report_phishing') }}" id="reportForm">
+                    <div class="mb-3">
+                        <label for="url" class="form-label">Suspicious URL</label>
+                        <input type="url" 
+                               class="form-control" 
+                               id="url" 
+                               name="url" 
+                               placeholder="https://example.com" 
+                               required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description (Optional)</label>
+                        <textarea class="form-control" 
+                                  id="description" 
+                                  name="description" 
+                                  rows="3" 
+                                  placeholder="Describe why you think this is phishing..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Report Phishing
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Your Reports Section -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-list me-2"></i>
+                    Your Reports
+                </h5>
+                <span class="badge bg-primary">{{ reports|length }} Total</span>
+            </div>
+            <div class="card-body">
+                {% if reports %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>URL</th>
+                                    <th>Status</th>
+                                    <th>Submitted</th>
+                                    <th>Last Updated</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for report in reports %}
+                                <tr>
+                                    <td>
+                                        <div class="text-truncate" style="max-width: 300px;" title="{{ report.url }}">
+                                            {{ report.url }}
+                                        </div>
+                                        {% if report.description %}
+                                            <small class="text-muted d-block">{{ report.description[:100] }}{% if report.description|length > 100 %}...{% endif %}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if report.status == 'pending' %}
+                                            <span class="badge bg-warning">
+                                                <i class="fas fa-clock me-1"></i>Pending
+                                            </span>
+                                        {% elif report.status == 'verified' %}
+                                            <span class="badge bg-danger">
+                                                <i class="fas fa-check me-1"></i>Verified Phishing
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-times me-1"></i>False Positive
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div>{{ report.created_at.strftime('%Y-%m-%d') }}</div>
+                                        <small class="text-muted">{{ report.created_at.strftime('%H:%M') }}</small>
+                                    </td>
+                                    <td>
+                                        <div>{{ report.updated_at.strftime('%Y-%m-%d') }}</div>
+                                        <small class="text-muted">{{ report.updated_at.strftime('%H:%M') }}</small>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-flag fa-3x text-muted mb-3"></i>
+                        <h6 class="text-muted">No reports submitted yet</h6>
+                        <p class="text-muted">Help improve our detection by reporting suspicious URLs above.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="passwordModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-key me-2"></i>
+                    Change Password
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="passwordForm">
+                    <div class="mb-3">
+                        <label for="currentPassword" class="form-label">Current Password</label>
+                        <input type="password" class="form-control" id="currentPassword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="newPassword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="updatePassword()">Update Password</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Export Data Modal -->
+<div class="modal fade" id="exportModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-download me-2"></i>
+                    Export Your Data
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Choose what data you'd like to export:</p>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="exportScans" checked>
+                    <label class="form-check-label" for="exportScans">
+                        Scan History
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="exportReports" checked>
+                    <label class="form-check-label" for="exportReports">
+                        Phishing Reports
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="exportProfile">
+                    <label class="form-check-label" for="exportProfile">
+                        Profile Information
+                    </label>
+                </div>
+                <div class="mt-3">
+                    <label for="exportFormat" class="form-label">Export Format</label>
+                    <select class="form-select" id="exportFormat">
+                        <option value="json">JSON</option>
+                        <option value="csv">CSV</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="performExport()">
+                    <i class="fas fa-download me-2"></i>Export
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function changePassword() {
+    const modal = new bootstrap.Modal(document.getElementById('passwordModal'));
+    modal.show();
+}
+
+function updatePassword() {
+    const currentPassword = document.getElementById('currentPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    if (newPassword !== confirmPassword) {
+        alert('New passwords do not match');
+        return;
+    }
+    
+    if (newPassword.length < 6) {
+        alert('Password must be at least 6 characters long');
+        return;
+    }
+    
+    // Here you would typically send an AJAX request to update the password
+    // For now, we'll just show a success message
+    alert('Password change functionality would be implemented here');
+    bootstrap.Modal.getInstance(document.getElementById('passwordModal')).hide();
+}
+
+function exportData() {
+    const modal = new bootstrap.Modal(document.getElementById('exportModal'));
+    modal.show();
+}
+
+function performExport() {
+    const exportScans = document.getElementById('exportScans').checked;
+    const exportReports = document.getElementById('exportReports').checked;
+    const exportProfile = document.getElementById('exportProfile').checked;
+    const format = document.getElementById('exportFormat').value;
+    
+    if (!exportScans && !exportReports && !exportProfile) {
+        alert('Please select at least one data type to export');
+        return;
+    }
+    
+    // Here you would typically send an AJAX request to generate and download the export
+    // For now, we'll just show a message
+    alert(`Export functionality would generate a ${format.toUpperCase()} file with the selected data`);
+    bootstrap.Modal.getInstance(document.getElementById('exportModal')).hide();
+}
+
+// Auto-hide alerts after 5 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+        if (alert.classList.contains('alert-success') || alert.classList.contains('alert-info')) {
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }, 5000);
+        }
+    });
+});
+</script>
+{% endblock %}

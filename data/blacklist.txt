@@ -1,0 +1,178 @@
+# PhishGuard Blacklist - Known Phishing Domains
+# This file contains domains that have been identified as phishing sites
+# Format: one domain per line, comments start with #
+# Last updated: 2025-01-24
+
+# Banking and Financial Phishing
+securebankupdate.com
+paypal-security-check.com
+chase-bank-verify.net
+wells-fargo-alert.org
+bankofamerica-secure.info
+amazon-account-suspended.com
+apple-id-locked.net
+microsoft-account-verify.org
+google-security-alert.com
+
+# E-commerce Phishing
+amazon-prime-renewal.net
+ebay-account-suspended.com
+walmart-winner.org
+target-giftcard.net
+bestbuy-promotion.com
+
+# Social Media Phishing
+facebook-security-check.net
+instagram-verify-account.com
+twitter-suspended-account.org
+linkedin-premium-offer.net
+tiktok-creator-fund.com
+
+# Cryptocurrency Phishing
+coinbase-wallet-locked.com
+binance-security-alert.net
+blockchain-verify.org
+metamask-support.net
+crypto-airdrop-claim.com
+
+# Government and Official Service Phishing
+irs-tax-refund.gov.fake.com
+usps-package-delivery.net
+dhl-shipment-update.org
+fedex-tracking-update.com
+ups-delivery-failed.net
+
+# Tech Support Phishing
+microsoft-tech-support.net
+apple-support-call.com
+google-chrome-update.org
+windows-defender-alert.net
+norton-antivirus-expired.com
+
+# Generic Phishing Patterns
+secure-login-required.com
+account-verification-needed.net
+urgent-action-required.org
+click-here-to-verify.com
+limited-time-offer-claim.net
+
+# Typosquatting Domains
+gooogle.com
+amaozn.com
+payapl.com
+microosft.com
+faecbook.com
+twiter.com
+instgram.com
+githb.com
+stackoverfow.com
+redditt.com
+
+# Suspicious TLD Domains
+free-money.tk
+win-prize.ml
+claim-reward.ga
+urgent-update.cf
+security-alert.pw
+
+# URL Shortener Abuse (domains used maliciously)
+suspicious-redirect.bit.ly
+malicious-link.tinyurl.com
+phishing-site.t.co
+
+# Recent Phishing Campaigns
+covid19-relief-fund.com
+stimulus-check-claim.gov.fake
+vaccine-appointment-booking.net
+work-from-home-opportunity.biz
+crypto-investment-guaranteed.info
+
+# Fake Software Downloads
+adobe-flash-update.exe.download
+java-update-required.net
+chrome-extension-install.com
+zoom-security-update.org
+skype-new-version.net
+
+# Dating and Romance Scams
+lonely-hearts-connect.com
+single-military-dating.net
+widow-inheritance-claim.org
+
+# Lottery and Prize Scams
+mega-millions-winner.com
+international-lottery-claim.net
+facebook-lottery-winner.org
+google-anniversary-prize.com
+
+# Business Email Compromise
+ceo-urgent-request.spoofed.com
+finance-wire-transfer.fake.net
+hr-payroll-update.phishing.org
+
+# Fake News and Misinformation Sites
+breaking-news-alert.fake
+celebrity-death-hoax.net
+miracle-cure-discovered.com
+
+# Academic and Educational Phishing
+student-loan-forgiveness.fake.edu
+scholarship-application.scam.org
+online-degree-accredited.fake.edu
+
+# Healthcare Phishing
+medical-records-update.fake.gov
+prescription-discount-card.scam
+health-insurance-expired.phishing
+
+# Real Estate Scams
+property-investment-guaranteed.scam
+mortgage-rate-reduction.fake
+rental-deposit-required.phishing
+
+# Job and Employment Scams
+work-from-home-guaranteed.scam
+data-entry-jobs-available.fake
+mystery-shopper-opportunity.phishing
+
+# Charity and Donation Scams
+disaster-relief-donation.fake
+veterans-support-fund.scam
+children-charity-urgent.phishing
+
+# Fake Streaming and Entertainment
+netflix-account-suspended.fake
+spotify-premium-free.scam
+disney-plus-lifetime.phishing
+youtube-monetization-program.fake
+
+# Gaming and Virtual Items
+steam-account-suspended.fake
+fortnite-free-vbucks.scam
+minecraft-premium-account.phishing
+roblox-free-robux.fake
+
+# Travel and Booking Scams
+airline-ticket-winner.fake
+hotel-booking-confirmation.scam
+vacation-package-deal.phishing
+car-rental-discount.fake
+
+# Insurance Scams
+auto-insurance-quote.fake
+health-insurance-discount.scam
+life-insurance-payout.phishing
+home-insurance-claim.fake
+
+# Tax and Accounting Scams
+tax-refund-processing.fake.gov
+accounting-software-expired.scam
+business-tax-audit.phishing.gov
+
+# Domain Variations of Popular Sites
+arnazon.com
+paypai.com
+gmial.com
+yahooo.com
+outlok.com
+hotmial.com

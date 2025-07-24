@@ -1,0 +1,406 @@
+{% extends "base.html" %}
+
+{% block title %}Security Education - PhishGuard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="text-center mb-5">
+            <h2>
+                <i class="fas fa-graduation-cap me-2"></i>
+                Cybersecurity Education Center
+            </h2>
+            <p class="lead text-muted">Learn how to identify and protect yourself from phishing attacks</p>
+        </div>
+    </div>
+</div>
+
+<!-- Overview Cards -->
+<div class="row mb-5">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-envelope fa-3x text-danger mb-3"></i>
+                <h5 class="card-title">Email Phishing</h5>
+                <p class="card-text">Learn to identify suspicious emails, fake attachments, and social engineering tactics.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-link fa-3x text-warning mb-3"></i>
+                <h5 class="card-title">Malicious URLs</h5>
+                <p class="card-text">Understand how to spot suspicious links, fake domains, and URL manipulation techniques.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-globe fa-3x text-info mb-3"></i>
+                <h5 class="card-title">Fake Websites</h5>
+                <p class="card-text">Recognize fraudulent websites, fake login pages, and brand impersonation attempts.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Email Phishing Section -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h4 class="mb-0">
+            <i class="fas fa-envelope text-danger me-2"></i>
+            Email Phishing Detection
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-6">
+                <h5 class="text-success">Safe Email Indicators</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex align-items-center">
+                        <i class="fas fa-check-circle text-success me-3"></i>
+                        <div>
+                            <strong>Personal Greeting</strong>
+                            <div class="text-muted small">Uses your actual name, not generic terms</div>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <i class="fas fa-check-circle text-success me-3"></i>
+                        <div>
+                            <strong>Legitimate Sender</strong>
+                            <div class="text-muted small">From a verified, expected email address</div>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <i class="fas fa-check-circle text-success me-3"></i>
+                        <div>
+                            <strong>Professional Language</strong>
+                            <div class="text-muted small">Proper grammar, spelling, and formatting</div>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <i class="fas fa-check-circle text-success me-3"></i>
+                        <div>
+                            <strong>Expected Communication</strong>
+                            <div class="text-muted small">Related to services you actually use</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-6">
+                <h5 class="text-danger">Phishing Red Flags</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex align-items-center">
+                        <i class="fas fa-exclamation-triangle text-danger me-3"></i>
+                        <div>
+                            <strong>Urgent Action Required</strong>
+                            <div class="text-muted small">"Act now," "expires today," "immediate action"</div>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <i class="fas fa-exclamation-triangle text-danger me-3"></i>
+                        <div>
+                            <strong>Generic Greetings</strong>
+                            <div class="text-muted small">"Dear Customer," "Dear User," "Hello there"</div>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <i class="fas fa-exclamation-triangle text-danger me-3"></i>
+                        <div>
+                            <strong>Suspicious Attachments</strong>
+                            <div class="text-muted small">Unexpected .exe, .zip, or document files</div>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <i class="fas fa-exclamation-triangle text-danger me-3"></i>
+                        <div>
+                            <strong>Requests for Sensitive Info</strong>
+                            <div class="text-muted small">Passwords, SSN, credit card details</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- URL Security Section -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h4 class="mb-0">
+            <i class="fas fa-link text-warning me-2"></i>
+            URL Security Guidelines
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-4">
+                <h5 class="text-success">Safe URL Characteristics</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <i class="fas fa-shield-alt text-success me-2"></i>
+                        <strong>HTTPS Protocol</strong> - Look for the lock icon
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <strong>Correct Domain</strong> - Matches the expected website
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-spell-check text-success me-2"></i>
+                        <strong>Proper Spelling</strong> - No typos in the domain name
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-ruler text-success me-2"></i>
+                        <strong>Reasonable Length</strong> - Not excessively long
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-4">
+                <h5 class="text-warning">Suspicious Indicators</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <i class="fas fa-question-circle text-warning me-2"></i>
+                        <strong>URL Shorteners</strong> - bit.ly, tinyurl.com, etc.
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-eye text-warning me-2"></i>
+                        <strong>Too Many Subdomains</strong> - Multiple dots in domain
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-exclamation text-warning me-2"></i>
+                        <strong>Suspicious Characters</strong> - @ symbols, hyphens
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-clock text-warning me-2"></i>
+                        <strong>New Domains</strong> - Recently registered
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-4">
+                <h5 class="text-danger">Danger Signs</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <i class="fas fa-times text-danger me-2"></i>
+                        <strong>IP Addresses</strong> - Numbers instead of domain names
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-ban text-danger me-2"></i>
+                        <strong>No HTTPS</strong> - Only HTTP, especially for login pages
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-mask text-danger me-2"></i>
+                        <strong>Typosquatting</strong> - Similar to popular sites
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-globe text-danger me-2"></i>
+                        <strong>Suspicious TLDs</strong> - .tk, .ml, .ga domains
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Best Practices Section -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h4 class="mb-0">
+            <i class="fas fa-shield-alt text-primary me-2"></i>
+            Security Best Practices
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Prevention Strategies</h5>
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">
+                                <i class="fas fa-key text-primary me-2"></i>
+                                Use Strong Passwords
+                            </h6>
+                        </div>
+                        <p class="mb-1">Create unique, complex passwords for each account and use a password manager.</p>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">
+                                <i class="fas fa-mobile-alt text-primary me-2"></i>
+                                Enable Two-Factor Authentication
+                            </h6>
+                        </div>
+                        <p class="mb-1">Add an extra layer of security with 2FA whenever possible.</p>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">
+                                <i class="fas fa-sync text-primary me-2"></i>
+                                Keep Software Updated
+                            </h6>
+                        </div>
+                        <p class="mb-1">Regularly update your browser, OS, and security software.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h5>Verification Steps</h5>
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">
+                                <i class="fas fa-phone text-success me-2"></i>
+                                Contact Directly
+                            </h6>
+                        </div>
+                        <p class="mb-1">When in doubt, contact the organization through official channels.</p>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">
+                                <i class="fas fa-search text-success me-2"></i>
+                                Verify URLs
+                            </h6>
+                        </div>
+                        <p class="mb-1">Always check the URL before entering sensitive information.</p>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">
+                                <i class="fas fa-clock text-success me-2"></i>
+                                Take Your Time
+                            </h6>
+                        </div>
+                        <p class="mb-1">Don't rush when dealing with urgent-sounding requests.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Common Phishing Examples -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h4 class="mb-0">
+            <i class="fas fa-examples text-info me-2"></i>
+            Common Phishing Examples
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="accordion" id="examplesAccordion">
+            <!-- Banking Phishing -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#banking">
+                        <i class="fas fa-university me-2"></i>
+                        Banking Phishing Emails
+                    </button>
+                </h2>
+                <div id="banking" class="accordion-collapse collapse" data-bs-parent="#examplesAccordion">
+                    <div class="accordion-body">
+                        <div class="alert alert-warning">
+                            <strong>Example Subject:</strong> "URGENT: Your account will be suspended"
+                        </div>
+                        <h6>Red Flags:</h6>
+                        <ul>
+                            <li>Generic greeting ("Dear Customer")</li>
+                            <li>Urgent language and threats</li>
+                            <li>Requests to click links to "verify" account</li>
+                            <li>Poor grammar and spelling errors</li>
+                            <li>Sender domain doesn't match the bank</li>
+                        </ul>
+                        <div class="alert alert-success">
+                            <strong>What to do:</strong> Contact your bank directly through their official website or phone number.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tech Support Scams -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#techsupport">
+                        <i class="fas fa-laptop me-2"></i>
+                        Tech Support Scams
+                    </button>
+                </h2>
+                <div id="techsupport" class="accordion-collapse collapse" data-bs-parent="#examplesAccordion">
+                    <div class="accordion-body">
+                        <div class="alert alert-warning">
+                            <strong>Example:</strong> "Your computer has been infected! Call this number immediately!"
+                        </div>
+                        <h6>Red Flags:</h6>
+                        <ul>
+                            <li>Unsolicited calls or pop-ups about computer problems</li>
+                            <li>Requests for remote access to your computer</li>
+                            <li>Demands for immediate payment</li>
+                            <li>Claims to be from Microsoft, Apple, or other tech companies</li>
+                        </ul>
+                        <div class="alert alert-success">
+                            <strong>What to do:</strong> Hang up or close the pop-up. Legitimate tech companies don't make unsolicited calls.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Social Media Phishing -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#social">
+                        <i class="fas fa-share-alt me-2"></i>
+                        Social Media Phishing
+                    </button>
+                </h2>
+                <div id="social" class="accordion-collapse collapse" data-bs-parent="#examplesAccordion">
+                    <div class="accordion-body">
+                        <div class="alert alert-warning">
+                            <strong>Example:</strong> "Someone posted a video of you! Click here to see it"
+                        </div>
+                        <h6>Red Flags:</h6>
+                        <ul>
+                            <li>Messages about embarrassing content</li>
+                            <li>Fake notifications about tagged photos or videos</li>
+                            <li>Links to sites that look like social media login pages</li>
+                            <li>Messages from friends' compromised accounts</li>
+                        </ul>
+                        <div class="alert alert-success">
+                            <strong>What to do:</strong> Verify with your friend through another communication method before clicking any links.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Action Section -->
+<div class="card">
+    <div class="card-body text-center">
+        <h5>
+            <i class="fas fa-tools me-2"></i>
+            Put Your Knowledge to Practice
+        </h5>
+        <p class="text-muted">Use our scanning tools to analyze suspicious content and stay protected.</p>
+        <div class="d-flex justify-content-center gap-2 flex-wrap">
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('scan_url') }}" class="btn btn-primary">
+                    <i class="fas fa-link me-2"></i>Scan URL
+                </a>
+                <a href="{{ url_for('scan_email') }}" class="btn btn-info">
+                    <i class="fas fa-envelope me-2"></i>Analyze Email
+                </a>
+                <a href="{{ url_for('scan_html') }}" class="btn btn-success">
+                    <i class="fas fa-code me-2"></i>Scan HTML File
+                </a>
+            {% else %}
+                <a href="{{ url_for('register') }}" class="btn btn-primary">
+                    <i class="fas fa-user-plus me-2"></i>Sign Up to Start Scanning
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

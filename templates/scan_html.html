@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block title %}HTML Scanner - PhishGuard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="fas fa-code me-2"></i>
+                    HTML File Scanner
+                </h4>
+                <p class="text-muted mb-0">Upload and analyze HTML files for malicious scripts, hidden elements, and fake login forms</p>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data" id="htmlScanForm">
+                    <div class="mb-3">
+                        <label for="html_file" class="form-label">Select HTML File</label>
+                        <div class="input-group">
+                            <input type="file" 
+                                   class="form-control" 
+                                   id="html_file" 
+                                   name="html_file" 
+                                   accept=".html,.htm"
+                                   required>
+                            <button type="submit" class="btn btn-primary" id="scanBtn">
+                                <i class="fas fa-search me-2"></i>
+                                Scan File
+                            </button>
+                        </div>
+                        <div class="form-text">
+                            Supported formats: .html, .htm (Max file size: 5MB)
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Privacy Notice:</strong> Your HTML files are analyzed locally and are not stored on our servers.
+                    </div>
+                </form>
+                
+                {% if result %}
+                <div class="mt-4">
+                    <h5>
+                        <i class="fas fa-chart-line me-2"></i>
+                        Scan Results for "{{ filename }}"
+                    </h5>
+                    
+                    <!-- Result Summary -->
+                    <div class="alert 
+                        {% if result.result == 'safe' %}alert-success
+                        {% elif result.result == 'phishing' %}alert-danger
+                        {% else %}alert-warning{% endif %}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="alert-heading mb-1">
+                                    {% if result.result == 'safe' %}
+                                        <i class="fas fa-check-circle me-2"></i>File Appears Safe
+                                    {% elif result.result == 'phishing' %}
+                                        <i class="fas fa-exclamation-triangle me-2"></i>Malicious Content Detected
+                                    {% else %}
+                                        <i class="fas fa-question-circle me-2"></i>Suspicious Elements Found
+                                    {% endif %}
+                                </h6>
+                                <p class="mb-0">
+                                    {% if result.result == 'safe' %}
+                                        This HTML file shows no obvious signs of malicious content.
+                                    {% elif result.result == 'phishing' %}
+                                        <strong>Warning:</strong> This HTML file contains elements commonly used in phishing attacks.
+                                    {% else %}
+                                        This HTML file has some characteristics that warrant caution.
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="text-end">
+                                <div class="h5 mb-0">{{ (result.confidence * 100)|round }}%</div>
+                                <small>Risk Score</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Detailed Analysis -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">
+                                <i class="fas fa-microscope me-2"></i>
+                                Detailed Analysis
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            {% if result.details.rules_triggered %}
+                            <h6>Security Issues Found</h6>
+                            <div class="mb-3">
+                                {% for rule in result.details.rules_triggered %}
+                                <div class="alert alert-warning py-2">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    {{ rule }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            
+                            {% if result.details.suspicious_elements %}
+                            <h6>Suspicious Elements</h6>
+                            <div class="mb-3">
+                                {% for element in result.details.suspicious_elements %}
+                                <div class="alert alert-danger py-2">
+                                    <i class="fas fa-code me-2"></i>
+                                    <code>{{ element }}</code>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            
+                            {% if result.details.features %}
+                            <h6>File Analysis</h6>
+                            <div class="row">
+                                {% set features = result.details.features %}
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled small">
+                                        <li><strong>File Size:</strong> {{ features.html_length }} bytes</li>
+                                        <li><strong>Forms:</strong> {{ features.num_forms }}</li>
+                                        <li><strong>Password Fields:</strong> {{ features.num_password_fields }}</li>
+                                        <li><strong>External Scripts:</strong> {{ features.num_external_scripts }}</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled small">
+                                        <li><strong>External Links:</strong> {{ features.num_external_links }}</li>
+                                        <li><strong>Hidden Elements:</strong> {{ features.num_hidden_elements }}</li>
+                                        <li><strong>Login Keywords:</strong> {{ features.num_login_keywords }}</li>
+                                        <li><strong>Popular Brand Mentioned:</strong> 
+                                            {% if features.mentions_popular_brand %}
+                                                <span class="text-warning">Yes</span>
+                                            {% else %}
+                                                <span class="text-success">No</span>
+                                            {% endif %}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <h6>Security Features</h6>
+                                    <ul class="list-unstyled small">
+                                        <li><strong>Has Title:</strong> 
+                                            {% if features.has_title %}
+                                                <span class="text-success">Yes</span>
+                                            {% else %}
+                                                <span class="text-warning">No</span>
+                                            {% endif %}
+                                        </li>
+                                        <li><strong>External Form Actions:</strong> {{ features.num_external_form_actions }}</li>
+                                        <li><strong>Meta Refresh:</strong> 
+                                            {% if features.has_meta_refresh %}
+                                                <span class="text-warning">Detected</span>
+                                            {% else %}
+                                                <span class="text-success">None</span>
+                                            {% endif %}
+                                        </li>
+                                        <li><strong>Obfuscated JavaScript:</strong> 
+                                            {% if features.has_obfuscated_js %}
+                                                <span class="text-danger">Detected</span>
+                                            {% else %}
+                                                <span class="text-success">None</span>
+                                            {% endif %}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- HTML Security Tips -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-code me-2"></i>
+                    HTML Security Guidelines
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6 class="text-success">Safe HTML Signs</h6>
+                        <ul class="list-unstyled small">
+                            <li><i class="fas fa-check text-success me-2"></i>Clean, readable code</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Legitimate form actions</li>
+                            <li><i class="fas fa-check text-success me-2"></i>No obfuscated scripts</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Proper HTTPS forms</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="text-warning">Warning Signs</h6>
+                        <ul class="list-unstyled small">
+                            <li><i class="fas fa-exclamation-triangle text-warning me-2"></i>Hidden form elements</li>
+                            <li><i class="fas fa-exclamation-triangle text-warning me-2"></i>External script sources</li>
+                            <li><i class="fas fa-exclamation-triangle text-warning me-2"></i>Password fields without HTTPS</li>
+                            <li><i class="fas fa-exclamation-triangle text-warning me-2"></i>Fake brand login forms</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="text-danger">Red Flags</h6>
+                        <ul class="list-unstyled small">
+                            <li><i class="fas fa-times text-danger me-2"></i>Obfuscated JavaScript</li>
+                            <li><i class="fas fa-times text-danger me-2"></i>Hidden redirects</li>
+                            <li><i class="fas fa-times text-danger me-2"></i>Suspicious form actions</li>
+                            <li><i class="fas fa-times text-danger me-2"></i>Brand impersonation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('htmlScanForm').addEventListener('submit', function() {
+    const scanBtn = document.getElementById('scanBtn');
+    scanBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Scanning...';
+    scanBtn.disabled = true;
+});
+
+document.getElementById('html_file').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        const fileSize = file.size / 1024 / 1024; // Convert to MB
+        if (fileSize > 5) {
+            alert('File size must be less than 5MB');
+            this.value = '';
+        }
+    }
+});
+</script>
+{% endblock %}
